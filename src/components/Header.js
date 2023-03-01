@@ -9,7 +9,7 @@ const Header = () => {
   const handleLogin = async () => {
     const provider = new GoogleAuthProvider();
     await signInWithPopup(auth, provider)
-      .then((result) => {
+      .then(() => {
         console.log('Signed in with Google successfully');
       })
       .catch((error) => {
@@ -24,7 +24,7 @@ const Header = () => {
   return (
     <nav className="bg-white py-4 px-8 shadow">
       <div className="max-w-7xl mx-auto flex justify-between">
-        <div className="font-bold text-xl">My Blog</div>
+        <div className="font-bold text-xl">Meu Blog</div>
         {user ? (
           <button
             className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
