@@ -22,7 +22,7 @@ const Header = () => {
   };
 
   return (
-    <nav className="bg-white py-4 px-8 shadow">
+    <nav className="bg-gray-100 py-4 px-8 shadow-lg">
       <div className="max-w-7xl mx-auto flex justify-between">
         <div className="font-bold text-xl">Meu Blog</div>
         {user ? (
