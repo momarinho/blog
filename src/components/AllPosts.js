@@ -1,9 +1,18 @@
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 
 const AllPosts = ({ posts, onOpen }) => {
+  const [numPosts, setNumPosts] = useState(6);
+
   const sortedPosts = posts
     .slice()
     .sort((a, b) => b.createdAt.toDate() - a.createdAt.toDate());
+
+  const visiblePosts = sortedPosts.slice(0, numPosts);
+
+  const handleShowMore = () => {
+    setNumPosts(numPosts + 6);
+  };
 
   return (
     <section>
@@ -17,7 +26,7 @@ const AllPosts = ({ posts, onOpen }) => {
         </button>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
-        {sortedPosts.map((post) => (
+        {visiblePosts.map((post) => (
           <Link
             key={post.id}
             to={`/posts/${post.id}`}
@@ -27,7 +36,7 @@ const AllPosts = ({ posts, onOpen }) => {
             <p
               className="mb-4 flex-1 prose"
               dangerouslySetInnerHTML={{
-                __html: `${post.content.substring(0, 100)}...`,
+                __html: `${post.content.substring(0, 50)}...`,
               }}
             ></p>
 
@@ -39,6 +48,12 @@ const AllPosts = ({ posts, onOpen }) => {
           </Link>
         ))}
       </div>
+      {numPosts < sortedPosts.length && (
+        <div className='flex justify-center mt-8'>
+          <button  onClick={handleShowMore}
+            className="bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded">Show more</button>
+        </div>
+      )}
     </section>
   );
 };

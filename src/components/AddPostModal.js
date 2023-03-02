@@ -1,14 +1,10 @@
 import React, { useState } from 'react';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
-import { storage } from '../config/firebase';
-import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
 
 const AddPostModal = ({ show, onClose, onAdd }) => {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
-  const [file, setFile] = useState(null);
-  const [percent, setPercent] = useState(0);
 
   const handleAdd = (event) => {
     event.preventDefault();
@@ -19,38 +15,6 @@ const AddPostModal = ({ show, onClose, onAdd }) => {
 
   const handleClose = () => {
     onClose();
-  };
-
-  function handleChange(event) {
-    setFile(event.target.files[0]);
-  }
-
-  const handleUpload = () => {
-    if (!file) {
-      alert('Please upload an image first!');
-      return;
-    }
-
-    const storageRef = ref(storage, `/files/${file.name}`);
-
-    const uploadTask = uploadBytesResumable(storageRef, file);
-
-    uploadTask.on(
-      'state_changed',
-      (snapshot) => {
-        const percent = Math.round(
-          (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-        );
-
-        setPercent(percent);
-      },
-      (err) => console.log(err),
-      () => {
-        getDownloadURL(uploadTask.snapshot.ref).then((url) => {
-          console.log(url);
-        });
-      }
-    );
   };
 
   const modules = {
@@ -121,51 +85,35 @@ const AddPostModal = ({ show, onClose, onAdd }) => {
               className="mb-4"
             />
 
-            <label className="block mb-2" htmlFor="file">
-              Image
-            </label>
-            <div className="flex items-center mb-4">
-              <input
-                type="file"
-                id="file"
-                accept="image/*"
-                onChange={handleChange}
-                className="hidden"
-              />
-              <button
-                onClick={handleUpload}
-                className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 mr-4"
-              >
-                Upload
-              </button>
-              {file && (
-                <span className="text-gray-500">
-                  {file.name} ({Math.round(file.size / 1024)} KB)
-                </span>
-              )}
-            </div>
-            {percent > 0 && percent < 100 && (
-              <div className="w-full bg-gray-300 rounded-md mb-4">
-                <div
-                  className="bg-blue-600 h-full rounded-md"
-                  style={{ width: `${percent}%` }}
-                />
-              </div>
-            )}
-            <div className="flex justify-end">
-              <button
-                type="button"
-                onClick={handleClose}
-                className="px-4 py-2 border border-gray-400 rounded-md mr-4"
-              >
-                Cancel
-              </button>
+            <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
               <button
                 type="submit"
-                className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+                className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:ml-3 sm:w-auto sm:text-sm"
               >
-                Add
+                Add Post
               </button>
+              <div className="absolute top-0 right-0 pt-4 pr-4">
+                <button
+                  onClick={handleClose}
+                  type="button"
+                  className="text-gray-100 hover:text-gray-200 bg-red-600 hover:bg-red-700 transition ease-in-out duration-150 rounded-full"
+                >
+                  <span className="sr-only">Close</span>
+                  <svg
+                    className="h-8 w-8"
+                    stroke="currentColor"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M6 18L18 6M6 6l12 12"
+                    />
+                  </svg>
+                </button>
+              </div>
             </div>
           </form>
         </div>
@@ -173,5 +121,4 @@ const AddPostModal = ({ show, onClose, onAdd }) => {
     )
   );
 };
-
 export default AddPostModal;

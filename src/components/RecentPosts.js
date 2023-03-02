@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 const RecentPosts = ({ posts }) => {
@@ -8,6 +8,14 @@ const RecentPosts = ({ posts }) => {
     .slice(0, 5);
 
   const [currentIndex, setCurrentIndex] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentIndex((currentIndex + 1) % sortedPosts.length);
+    }, 4000);
+
+    return () => clearInterval(interval);
+  }, [currentIndex, sortedPosts.length]);
 
   const goToNext = () => {
     setCurrentIndex((currentIndex + 1) % sortedPosts.length);
