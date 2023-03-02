@@ -24,7 +24,12 @@ const AllPosts = ({ posts, onOpen }) => {
             className="bg-white rounded-lg shadow-lg p-8 flex flex-col hover:scale-105"
           >
             <h2 className="text-2xl font-bold mb-2">{post.title}</h2>
-            <p className="mb-4 flex-1">{post.content.substring(0, 40).replace(/(<([^>]+)>)/gi, '')}...</p>
+            <p
+              className="mb-4 flex-1 prose"
+              dangerouslySetInnerHTML={{
+                __html: post.content.substring(0, 40),
+              }}
+            ></p>
             <div className="flex justify-between items-center">
               <p className="text-sm text-gray-500">
                 {new Date(post.createdAt.toDate()).toLocaleString()}

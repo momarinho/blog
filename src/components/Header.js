@@ -22,9 +22,9 @@ const Header = () => {
   };
 
   return (
-    <nav className="bg-gray-700 py-4 px-8 shadow-lg">
+    <nav className="bg-white py-4 px-8 shadow-sm">
       <div className="max-w-7xl mx-auto flex justify-between items-center">
-        <div className="font-bold text-xl text-gray-300">My Blog</div>
+        <div className="font-bold text-xl text-gray-800">My Blog</div>
         {user ? (
           <div className="flex items-center">
             <img
@@ -32,7 +32,7 @@ const Header = () => {
               alt="user profile"
               className="h-8 w-8 rounded-full mr-2"
             />
-            <div className="text-gray-300 mr-2">{user.displayName}</div>
+            <div className="text-gray-500 mr-2">{user.displayName}</div>
             <button
               className="text-red-500 hover:text-red-600  font-bold py-2 px-4 rounded"
               onClick={handleLogout}
