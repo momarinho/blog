@@ -5,6 +5,7 @@ import { collection, onSnapshot, addDoc } from 'firebase/firestore';
 import AddPostModal from './AddPostModal';
 import RecentPosts from './RecentPosts';
 import AllPosts from './AllPosts';
+import { Link } from 'react-router-dom';
 
 const Posts = () => {
   const [posts, setPosts] = useState([]);
@@ -47,7 +48,13 @@ const Posts = () => {
         onClose={handleCloseModal}
         onAdd={handleAdd}
       />
-      <button></button>
+
+      {/* <Link
+        to="/add-post"
+        className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded mr-2"
+      >
+        Add Post
+      </Link> */}
 
       <RecentPosts posts={posts} />
 

@@ -22,9 +22,9 @@ const Header = () => {
   };
 
   return (
-    <nav className="bg-gray-100 py-4 px-8 shadow-lg">
+    <nav className="bg-gray-700 py-4 px-8 shadow-lg">
       <div className="max-w-7xl mx-auto flex justify-between">
-        <div className="font-bold text-xl">Meu Blog</div>
+        <div className="font-bold text-xl text-gray-300">Meu Blog</div>
         {user ? (
           <button
             className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"

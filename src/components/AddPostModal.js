@@ -1,4 +1,6 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 
 const AddPostModal = ({ show, onClose, onAdd }) => {
   const [title, setTitle] = useState('');
@@ -17,6 +19,34 @@ const AddPostModal = ({ show, onClose, onAdd }) => {
     setContent('');
   };
 
+  const modules = {
+    toolbar: {
+      container: [
+        [{ header: [1, 2, false] }],
+        ['bold', 'italic', 'underline', 'strike', 'blockquote'],
+        [{ list: 'ordered' }, { list: 'bullet' }],
+        ['link', 'image'],
+        ['clean'],
+      ],
+      imageResize: {
+        displaySize: true,
+      },
+    },
+  };
+
+  const formats = [
+    'header',
+    'bold',
+    'italic',
+    'underline',
+    'strike',
+    'blockquote',
+    'list',
+    'bullet',
+    'link',
+    'image',
+  ];
+
   return (
     show && (
       <div
@@ -24,7 +54,7 @@ const AddPostModal = ({ show, onClose, onAdd }) => {
         aria-hidden="true"
       >
         <div
-          className="bg-white rounded-lg shadow-md p-8"
+          className="bg-white rounded-lg shadow-md p-8 w-5/6"
           role="dialog"
           aria-modal="true"
           aria-labelledby="add-post-modal-title"
@@ -47,12 +77,14 @@ const AddPostModal = ({ show, onClose, onAdd }) => {
             <label className="block mb-2" htmlFor="content">
               Content
             </label>
-            <textarea
+            <ReactQuill
               id="content"
               value={content}
-              onChange={(e) => setContent(e.target.value)}
+              onChange={(value) => setContent(value)}
               required
-              className="w-full border border-gray-400 p-2 rounded mb-4"
+              modules={modules}
+              formats={formats}
+              className="mb-4 h-80 overflow-y-auto"
             />
             <div className="flex justify-end">
               <button

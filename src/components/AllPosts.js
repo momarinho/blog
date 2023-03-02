@@ -1,4 +1,6 @@
 const AllPosts = ({ posts, onOpen }) => {
+  const sortedPosts = posts.slice().sort((a, b) => b.createdAt.toDate() - a.createdAt.toDate());
+
   return (
     <section>
       <div className="flex justify-between">
@@ -11,7 +13,7 @@ const AllPosts = ({ posts, onOpen }) => {
         </button>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {posts.map((post) => (
+        {sortedPosts.map((post) => (
           <div
             key={post.id}
             className="bg-white rounded-lg shadow-md p-8 flex flex-col"

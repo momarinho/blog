@@ -1,12 +1,18 @@
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+
 import './index.css';
-import Header from './components/Header';
-import Posts from './components/Posts';
+import HomePage from './screens/HomePage';
+import Post from './screens/Post';
 
 function App() {
   return (
     <div className="min-h-screen min-w-full">
-      <Header />
-      <Posts />
+      <Router>
+        <Routes>
+          <Route exact path="/" element={<HomePage />} />
+          <Route exact path="/posts/:id" element={<Post />} />
+        </Routes>
+      </Router>
     </div>
   );
 }
