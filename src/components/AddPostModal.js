@@ -1,10 +1,14 @@
 import React, { useState } from 'react';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
+import { storage } from '../config/firebase';
+import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
 
 const AddPostModal = ({ show, onClose, onAdd }) => {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
+  const [file, setFile] = useState(null);
+  const [percent, setPercent] = useState(0);
 
   const handleAdd = (event) => {
     event.preventDefault();
@@ -15,8 +19,38 @@ const AddPostModal = ({ show, onClose, onAdd }) => {
 
   const handleClose = () => {
     onClose();
-    setTitle('');
-    setContent('');
+  };
+
+  function handleChange(event) {
+    setFile(event.target.files[0]);
+  }
+
+  const handleUpload = () => {
+    if (!file) {
+      alert('Please upload an image first!');
+      return;
+    }
+
+    const storageRef = ref(storage, `/files/${file.name}`);
+
+    const uploadTask = uploadBytesResumable(storageRef, file);
+
+    uploadTask.on(
+      'state_changed',
+      (snapshot) => {
+        const percent = Math.round(
+          (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+        );
+
+        setPercent(percent);
+      },
+      (err) => console.log(err),
+      () => {
+        getDownloadURL(uploadTask.snapshot.ref).then((url) => {
+          console.log(url);
+        });
+      }
+    );
   };
 
   const modules = {
@@ -50,11 +84,11 @@ const AddPostModal = ({ show, onClose, onAdd }) => {
   return (
     show && (
       <div
-        className="fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center"
+        className="fixed inset-0 bg-gray-900 bg-opacity-90 flex justify-center items-center"
         aria-hidden="true"
       >
         <div
-          className="bg-white rounded-lg shadow-md p-8 w-5/6"
+          className="bg-white rounded-lg shadow-md p-8 w-5/6 h-screen overflow-y-auto"
           role="dialog"
           aria-modal="true"
           aria-labelledby="add-post-modal-title"
@@ -84,21 +118,53 @@ const AddPostModal = ({ show, onClose, onAdd }) => {
               required
               modules={modules}
               formats={formats}
-              className="mb-4 h-80 overflow-y-auto"
+              className="mb-4"
             />
+
+            <label className="block mb-2" htmlFor="file">
+              Image
+            </label>
+            <div className="flex items-center mb-4">
+              <input
+                type="file"
+                id="file"
+                accept="image/*"
+                onChange={handleChange}
+                className="hidden"
+              />
+              <button
+                onClick={handleUpload}
+                className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 mr-4"
+              >
+                Upload
+              </button>
+              {file && (
+                <span className="text-gray-500">
+                  {file.name} ({Math.round(file.size / 1024)} KB)
+                </span>
+              )}
+            </div>
+            {percent > 0 && percent < 100 && (
+              <div className="w-full bg-gray-300 rounded-md mb-4">
+                <div
+                  className="bg-blue-600 h-full rounded-md"
+                  style={{ width: `${percent}%` }}
+                />
+              </div>
+            )}
             <div className="flex justify-end">
               <button
-                type="submit"
-                className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded mr-2"
-              >
-                Save
-              </button>
-              <button
                 type="button"
-                className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded"
                 onClick={handleClose}
+                className="px-4 py-2 border border-gray-400 rounded-md mr-4"
               >
                 Cancel
+              </button>
+              <button
+                type="submit"
+                className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+              >
+                Add
               </button>
             </div>
           </form>

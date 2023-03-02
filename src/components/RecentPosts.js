@@ -20,7 +20,7 @@ const RecentPosts = ({ posts }) => {
   };
 
   return (
-    <section className="mb-8">
+    <section className="mb-8 ">
       <div className="flex flex-col md:flex-row md:gap-4">
         {sortedPosts
           .slice(currentIndex, currentIndex + 3)
@@ -38,24 +38,19 @@ const RecentPosts = ({ posts }) => {
                 {post.title}
               </Link>
               <div className="flex justify-between items-center ">
-                {/* <p className="mb-4 flex-1">
-                  {post.content.substring(0, 40).replace(/(<([^>]+)>)/gi, '')}
-                  ...
-                </p> */}
-
                 <p className="text-sm text-gray-500">
                   {new Date(post.createdAt.toDate()).toLocaleString()}
                 </p>
               </div>
               <div className="flex justify-center">
                 <button
-                  className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded mr-4"
+                  className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-full mr-4"
                   onClick={goToPrevious}
                 >
                   &lt;
                 </button>
                 <button
-                  className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
+                  className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-full"
                   onClick={goToNext}
                 >
                   &gt;

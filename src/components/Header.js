@@ -2,6 +2,7 @@ import React from 'react';
 import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 import { auth } from '../config/firebase';
 import { useAuthState } from 'react-firebase-hooks/auth';
+import { Link } from 'react-router-dom';
 
 const Header = () => {
   const [user] = useAuthState(auth);
@@ -24,7 +25,9 @@ const Header = () => {
   return (
     <nav className="bg-white py-4 px-8 shadow-sm">
       <div className="max-w-7xl mx-auto flex justify-between items-center">
-        <div className="font-bold text-xl text-gray-800">My Blog</div>
+        <Link to="/" className="font-bold text-xl text-gray-800">
+          My Blog
+        </Link>
         {user ? (
           <div className="flex items-center">
             <img

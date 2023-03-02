@@ -27,9 +27,10 @@ const AllPosts = ({ posts, onOpen }) => {
             <p
               className="mb-4 flex-1 prose"
               dangerouslySetInnerHTML={{
-                __html: post.content.substring(0, 40),
+                __html: `${post.content.substring(0, 100)}...`,
               }}
             ></p>
+
             <div className="flex justify-between items-center">
               <p className="text-sm text-gray-500">
                 {new Date(post.createdAt.toDate()).toLocaleString()}
