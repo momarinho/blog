@@ -23,21 +23,29 @@ const Header = () => {
 
   return (
     <nav className="bg-gray-700 py-4 px-8 shadow-lg">
-      <div className="max-w-7xl mx-auto flex justify-between">
-        <div className="font-bold text-xl text-gray-300">Meu Blog</div>
+      <div className="max-w-7xl mx-auto flex justify-between items-center">
+        <div className="font-bold text-xl text-gray-300">My Blog</div>
         {user ? (
-          <button
-            className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
-            onClick={handleLogout}
-          >
-            Logout
-          </button>
+          <div className="flex items-center">
+            <img
+              src={user.photoURL}
+              alt="user profile"
+              className="h-8 w-8 rounded-full mr-2"
+            />
+            <div className="text-gray-300 mr-2">{user.displayName}</div>
+            <button
+              className="text-red-500 hover:text-red-600  font-bold py-2 px-4 rounded"
+              onClick={handleLogout}
+            >
+              Logout
+            </button>
+          </div>
         ) : (
           <button
             className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
             onClick={handleLogin}
           >
-            Login with Google
+            Login
           </button>
         )}
       </div>

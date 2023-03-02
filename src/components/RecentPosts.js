@@ -21,14 +21,13 @@ const RecentPosts = ({ posts }) => {
 
   return (
     <section className="mb-8">
-      <h2 className="text-2xl font-bold mb-4">Recent Posts</h2>
       <div className="flex flex-col md:flex-row md:gap-4">
         {sortedPosts
           .slice(currentIndex, currentIndex + 3)
           .map((post, index) => (
             <div
               key={post.id}
-              className={`bg-white rounded-lg shadow-md p-8 flex-1 mb-4 md:mb-0 ${
+              className={`bg-white rounded-lg shadow-md p-24 flex-1 mb-4 md:mb-0 hover:scale-105 ${
                 index > 0 ? 'hidden' : ''
               }`}
             >
@@ -38,10 +37,12 @@ const RecentPosts = ({ posts }) => {
               >
                 {post.title}
               </Link>
-              <div className="flex justify-between items-center">
-                <p className="mb-4 flex-1">
-                  {post.content.substring(0, 30)}...
-                </p>
+              <div className="flex justify-between items-center ">
+                {/* <p className="mb-4 flex-1">
+                  {post.content.substring(0, 40).replace(/(<([^>]+)>)/gi, '')}
+                  ...
+                </p> */}
+
                 <p className="text-sm text-gray-500">
                   {new Date(post.createdAt.toDate()).toLocaleString()}
                 </p>
