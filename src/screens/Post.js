@@ -1,7 +1,13 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { db, auth } from '../config/firebase';
-import { doc, onSnapshot, updateDoc, getDoc } from 'firebase/firestore';
+import {
+  doc,
+  onSnapshot,
+  updateDoc,
+  getDoc,
+  deleteDoc,
+} from 'firebase/firestore';
 
 import Header from '../components/Header';
 import EditPost from '../components/EditPost';
@@ -55,6 +61,12 @@ function Post() {
     );
   }
 
+  const handleDeleteClick = async () => {
+    const postRef = doc(db, 'posts', id);
+    await deleteDoc(postRef);
+    navigate('/', { replace: true });
+  };
+
   const handleLikeClick = async () => {
     const currentUser = auth.currentUser;
     const postRef = doc(db, 'posts', id);
@@ -71,8 +83,8 @@ function Post() {
     // Update the like count and the list of users who liked the post
     const newLikes = postData.likes + 1;
     const newLikedBy = [...likedBy, currentUser.uid];
+    setLikes(Number(newLikes));
     await updateDoc(postRef, { likes: newLikes, likedBy: newLikedBy });
-    setLikes(newLikes);
   };
 
   const handleEditClick = () => {
@@ -150,6 +162,7 @@ function Post() {
         onUpdatePost={handleUpdatePost}
         setShowModal={setShowModal}
         show={showModal}
+        onDelete={handleDeleteClick}
       />
     </div>
   );

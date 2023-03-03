@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 
-const EditPost = ({ post, onUpdatePost, setShowModal, show }) => {
+const EditPost = ({ post, onUpdatePost, setShowModal, show, onDelete }) => {
   const [title, setTitle] = useState(post.title);
   const [content, setContent] = useState(post.content);
 
@@ -22,6 +22,12 @@ const EditPost = ({ post, onUpdatePost, setShowModal, show }) => {
       title,
       content,
     });
+  };
+
+  const handleDeletePost = (event) => {
+    event.preventDefault();
+
+    onDelete(post.id);
   };
 
   const modules = {
@@ -115,12 +121,18 @@ const EditPost = ({ post, onUpdatePost, setShowModal, show }) => {
               className="mb-4"
             />
           </div>
-          <div className="flex justify-end">
+          <div className="flex justify-between">
             <button
               className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
               onClick={handleUpdatePost}
             >
               Save
+            </button>
+            <button
+              className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+              onClick={handleDeletePost}
+            >
+              Delete
             </button>
           </div>
         </div>
@@ -132,6 +144,7 @@ const EditPost = ({ post, onUpdatePost, setShowModal, show }) => {
 EditPost.propTypes = {
   post: PropTypes.object.isRequired,
   onUpdatePost: PropTypes.func.isRequired,
+  onDelete: PropTypes.func.isRequired,
 };
 
 export default EditPost;
