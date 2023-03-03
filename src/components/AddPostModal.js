@@ -5,12 +5,14 @@ import 'react-quill/dist/quill.snow.css';
 const AddPostModal = ({ show, onClose, onAdd }) => {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
+  const [uid, setUid] = useState('');
 
   const handleAdd = (event) => {
     event.preventDefault();
-    onAdd(title, content);
+    onAdd(title, content, uid);
     setTitle('');
     setContent('');
+    setUid('');
   };
 
   const handleClose = () => {

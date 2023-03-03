@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { db } from '../config/firebase';
-import { doc, onSnapshot, updateDoc } from 'firebase/firestore';
+import { db, auth } from '../config/firebase';
+import { doc, onSnapshot, updateDoc, getDoc } from 'firebase/firestore';
 
 import Header from '../components/Header';
 import EditPost from '../components/EditPost';
@@ -12,12 +12,21 @@ function Post() {
   const [post, setPost] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [likes, setLikes] = useState(0);
+  const [isCreator, setIsCreator] = useState(false);
 
   useEffect(() => {
     const postRef = doc(db, 'posts', id);
     const unsubscribe = onSnapshot(postRef, (doc) => {
       if (doc.exists()) {
-        setPost(doc.data());
+        const postData = doc.data();
+        setPost(postData);
+        setLikes(postData.likes);
+
+        const currentUser = auth.currentUser;
+        if (currentUser && postData.uid === currentUser.uid) {
+          setIsCreator(true);
+          console.log('is creator');
+        }
       }
     });
     return () => {
@@ -47,9 +56,23 @@ function Post() {
   }
 
   const handleLikeClick = async () => {
+    const currentUser = auth.currentUser;
     const postRef = doc(db, 'posts', id);
-    await updateDoc(postRef, { likes: likes + 1 });
-    setLikes(likes + 1);
+
+    // Check if the user has already liked the post
+    const postSnapshot = await getDoc(postRef);
+    const postData = postSnapshot.data();
+    const likedBy = postData.likedBy || [];
+    if (likedBy.includes(currentUser.uid)) {
+      // User has already liked the post
+      return;
+    }
+
+    // Update the like count and the list of users who liked the post
+    const newLikes = postData.likes + 1;
+    const newLikedBy = [...likedBy, currentUser.uid];
+    await updateDoc(postRef, { likes: newLikes, likedBy: newLikedBy });
+    setLikes(newLikes);
   };
 
   const handleEditClick = () => {
@@ -60,7 +83,7 @@ function Post() {
     <div className="min-h-screen bg-gray-100">
       <Header />
 
-      <div className="max-w-7xl mx-auto py-10 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-40 py-10 sm:px-6 lg:px-8">
         <div className="pb-5 border-b border-gray-200 flex row-auto justify-between">
           <div>
             <h1 className="text-3xl font-bold text-gray-900">{post.title}</h1>
@@ -69,13 +92,16 @@ function Post() {
             </p>
           </div>
           <div className="mt-6 flex items-center ">
-            <button
-              type="button"
-              className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 mr-4"
-              onClick={handleEditClick}
-            >
-              Edit
-            </button>
+            {isCreator && (
+              <button
+                type="button"
+                className="inline-block bg-gray-700 py-2 px-4 border border-transparent rounded-md shadow-sm text-base font-medium text-white hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 mr-4"
+                onClick={handleEditClick}
+              >
+                Edit
+              </button>
+            )}
+            {console.log('is creator', isCreator)}
             <button
               type="button"
               className="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"
@@ -93,7 +119,7 @@ function Post() {
       </div>
 
       <div className="flex justify-center">
-        <a href="mailto:mateusomarinho@gmail.com" className='m-2'>
+        <a href="mailto:mateusomarinho@gmail.com" className="m-2">
           <img
             src="https://img.shields.io/badge/-Gmail-%23333?style=for-the-badge&logo=gmail&logoColor=white"
             target="_blank"
@@ -104,7 +130,7 @@ function Post() {
           href="https://www.linkedin.com/in/mateus-marinho-908a26229/"
           target="_blank"
           rel="noreferrer"
-          className='m-2'
+          className="m-2"
         >
           <img
             src="https://img.shields.io/badge/-LinkedIn-%230077B5?style=for-the-badge&logo=linkedin&logoColor=white"

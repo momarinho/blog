@@ -36,15 +36,13 @@ const Header = ({ onOpen }) => {
       ) {
         setShowSearch(false);
       }
-      if (menuRef.current && !menuRef.current.contains(event.target)) {
-        setShowMenu(false);
-      }
     };
+
     document.addEventListener('mousedown', handleClickOutside);
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [searchInputRef, menuRef]);
+  }, [searchInputRef]);
 
   const handleSearch = async () => {
     console.log(`Searching for "${searchTerm}"...`);
@@ -58,7 +56,7 @@ const Header = ({ onOpen }) => {
   };
 
   return (
-    <nav className="bg-white py-4 px-8 shadow-sm">
+    <nav className="bg-white py-4 px-8 shadow-sm mb-8">
       <div className="max-w-7xl mx-auto flex justify-between items-center">
         <Link to="/" className="font-bold text-xl text-gray-800">
           My Blog
@@ -141,19 +139,13 @@ const Header = ({ onOpen }) => {
                     >
                       Logout
                     </button>
-                    <button
-                      onClick={onOpen}
-                      className="block w-full text-left py-2 hover:bg-gray-100"
-                    >
-                      New Post
-                    </button>
                   </div>
                 </div>
               )}
             </div>
           ) : (
             <button
-              className="bg-blue-500 hover:bg-blue-600 text-white focus:outline-none"
+              className="text-green-500 hover:text-green-600 focus:outline-none ml-2"
               onClick={handleLogin}
             >
               Login

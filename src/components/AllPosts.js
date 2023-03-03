@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
-const AllPosts = ({ posts, onOpen }) => {
+const AllPosts = ({ posts, onOpen, likes }) => {
   const [numPosts, setNumPosts] = useState(6);
 
   const sortedPosts = posts
@@ -45,7 +45,7 @@ const AllPosts = ({ posts, onOpen }) => {
             <Link
               key={post.id}
               to={`/posts/${post.id}`}
-              className="bg-white rounded-lg shadow-lg p-8 flex flex-col hover:scale-105"
+              className="bg-white rounded-lg shadow-lg p-8 flex flex-col hover:bg-gray-200"
             >
               <h2 className="text-2xl font-bold mb-2">{post.title}</h2>
               <p
@@ -59,7 +59,7 @@ const AllPosts = ({ posts, onOpen }) => {
                 <p className="text-sm text-gray-500">
                   {new Date(post.createdAt.toDate()).toLocaleString()}
                 </p>
-                <p>{} Likes</p>
+                <p>{likes}</p>
               </div>
             </Link>
           ))}

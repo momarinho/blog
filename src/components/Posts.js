@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { db } from '../config/firebase';
+import { db, auth } from '../config/firebase';
 import { collection, onSnapshot, addDoc } from 'firebase/firestore';
 
 import AddPostModal from './AddPostModal';
@@ -26,6 +26,7 @@ const Posts = () => {
     const docRef = await addDoc(collection(db, 'posts'), {
       title,
       content,
+      uid: auth.currentUser.uid,
       createdAt: new Date(),
     });
     console.log('New post added with ID: ', docRef.id);
@@ -52,10 +53,10 @@ const Posts = () => {
         <RecentPosts posts={posts} />
       </div>
 
-      <div></div>
-
-      <div className="bg-gray-50">
-        <AllPosts posts={posts} onOpen={handleOpenModal} />
+      <div className="bg-gray-50 py-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <AllPosts posts={posts} onOpen={handleOpenModal} />
+        </div>
       </div>
     </main>
   );
