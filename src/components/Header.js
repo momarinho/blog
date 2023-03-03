@@ -4,15 +4,17 @@ import { auth } from '../config/firebase';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { Link } from 'react-router-dom';
 
-const Header = () => {
+const Header = ({ onOpen }) => {
   const [user] = useAuthState(auth);
   const [searchTerm, setSearchTerm] = useState('');
   const [showSearch, setShowSearch] = useState(false);
+  const [showMenu, setShowMenu] = useState(false);
   const searchInputRef = useRef(null);
+  const menuRef = useRef(null);
 
   const handleSearch = () => {
     console.log(`Searching for "${searchTerm}"...`);
-    //implement 
+    //implement
   };
 
   const handleLogin = async () => {
@@ -28,6 +30,7 @@ const Header = () => {
 
   const handleLogout = async () => {
     await auth.signOut();
+    setShowMenu(false);
   };
 
   useEffect(() => {
@@ -38,12 +41,15 @@ const Header = () => {
       ) {
         setShowSearch(false);
       }
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        setShowMenu(false);
+      }
     };
     document.addEventListener('mousedown', handleClickOutside);
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [searchInputRef]);
+  }, [searchInputRef, menuRef]);
 
   return (
     <nav className="bg-white py-4 px-8 shadow-sm">
@@ -81,7 +87,7 @@ const Header = () => {
                   >
                     <path
                       fillRule="evenodd"
-                      d="M13.4B8r3B4p7yhRXuBWLqsQ546WR43cqQwrbXMDFnBi6vSJBeif8tPW85a7r7DM961Jvk4hdryZoByEp8GC8HzsqJpRN4FxGM906-1.06l.059-.06a5.482 5.482 0 00-1.844-9.972 5.5 5.5 0 107.783 7.783zM10.5 13a3.5 3.5 0 110-7 3.5 3.5 0 010 7z"
+                      d="M13.828 12.172a5 5 0 11-7.056-7.054 5 5 0 017.056 7.054zm1.4B8r3B4p7yhRXuBWLqsQ546WR43cqQwrbXMDFnBi6vSJBeif8tPW85a7r7DM961Jvk4hdryZoByEp8GC8HzsqJpRN4FxGM9828-5.657 7 7 0 015.657 2.828 7 7 0 010 9.9z"
                       clipRule="evenodd"
                     />
                   </svg>
@@ -89,27 +95,40 @@ const Header = () => {
               </div>
             )}
           </div>
-
           {user ? (
-            <>
-              <button
-                className="text-red-500 hover:text-red-600 ml-2"
-                onClick={handleLogout}
-              >
-                Logout
-              </button>
+            <div className="relative">
               <img
+                className="h-8 w-8 rounded-full ml-4 cursor-pointer"
+                onClick={() => setShowMenu(!showMenu)}
                 src={user.photoURL}
-                alt="user profile"
-                className="h-8 w-8 rounded-full mr-2 ml-2"
+                alt=""
+                ref={menuRef}
               />
-            </>
+              {showMenu && (
+                <div className="absolute top-0 right-0 z-10 bg-white border border-gray-400 rounded py-2 px-20">
+                  <div className="flex flex-col">
+                    <button
+                      className="block w-full text-left py-2 hover:bg-gray-100"
+                      onClick={handleLogout}
+                    >
+                      Logout
+                    </button>
+                    <button
+                      onClick={onOpen}
+                      className="block w-full text-left py-2 hover:bg-gray-100"
+                    >
+                      New Post
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
           ) : (
             <button
-              className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded"
+              className="bg-blue-500 hover:bg-blue-600 text-white focus:outline-none"
               onClick={handleLogin}
             >
-              Login with Google
+              Login
             </button>
           )}
         </div>

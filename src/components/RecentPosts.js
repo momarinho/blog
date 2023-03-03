@@ -34,7 +34,8 @@ const RecentPosts = ({ posts }) => {
             <Link to={`/posts/${post.id}`} className="text-xl font-bold mb-2">
               {post.title}
             </Link>
-            <p className="text-sm text-gray-500 mb-4">{post.excerpt}</p>
+            <img src={post.thumbnailUrl} alt={post.title} className="mb-4" />
+            <p className="text-sm text-gray-500">{post.excerpt}</p>
             <div className="flex justify-between items-center">
               <p className="text-sm text-gray-500">
                 {new Date(post.createdAt.toDate()).toLocaleString()}
