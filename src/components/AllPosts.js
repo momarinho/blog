@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import InfiniteScroll from 'react-infinite-scroll-component';
 
 const AllPosts = ({ posts, onOpen }) => {
   const [numPosts, setNumPosts] = useState(6);
@@ -25,35 +26,45 @@ const AllPosts = ({ posts, onOpen }) => {
           New Post
         </button>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
-        {visiblePosts.map((post) => (
-          <Link
-            key={post.id}
-            to={`/posts/${post.id}`}
-            className="bg-white rounded-lg shadow-lg p-8 flex flex-col hover:scale-105"
-          >
-            <h2 className="text-2xl font-bold mb-2">{post.title}</h2>
-            <p
-              className="mb-4 flex-1 prose"
-              dangerouslySetInnerHTML={{
-                __html: `${post.content.substring(0, 50)}...`,
-              }}
-            ></p>
-
-            <div className="flex justify-between items-center">
-              <p className="text-sm text-gray-500">
-                {new Date(post.createdAt.toDate()).toLocaleString()}
-              </p>
+      <InfiniteScroll
+        dataLength={visiblePosts.length}
+        next={handleShowMore}
+        hasMore={numPosts < sortedPosts.length}
+        loader={
+          <div class="flex justify-center items-center h-screen">
+            <div class="relative inline-block">
+              <div class="w-16 h-16 border-4 border-gray-300 rounded-full"></div>
+              <div class="absolute top-0 left-0 w-16 h-16 border-4 border-indigo-500 rounded-full border-t-0 animate-spin"></div>
             </div>
-          </Link>
-        ))}
-      </div>
-      {numPosts < sortedPosts.length && (
-        <div className='flex justify-center mt-8'>
-          <button  onClick={handleShowMore}
-            className="bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded">Show more</button>
+          </div>
+        }
+        endMessage={<p className="text-center mt-2 text-gray-300">No more posts to show</p>}
+      >
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
+          {visiblePosts.map((post) => (
+            <Link
+              key={post.id}
+              to={`/posts/${post.id}`}
+              className="bg-white rounded-lg shadow-lg p-8 flex flex-col hover:scale-105"
+            >
+              <h2 className="text-2xl font-bold mb-2">{post.title}</h2>
+              <p
+                className="mb-4 flex-1 prose"
+                dangerouslySetInnerHTML={{
+                  __html: `${post.content.substring(0, 50)}...`,
+                }}
+              ></p>
+
+              <div className="flex justify-between items-center">
+                <p className="text-sm text-gray-500">
+                  {new Date(post.createdAt.toDate()).toLocaleString()}
+                </p>
+                <p>{} Likes</p>
+              </div>
+            </Link>
+          ))}
         </div>
-      )}
+      </InfiniteScroll>
     </section>
   );
 };

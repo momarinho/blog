@@ -11,6 +11,7 @@ function Post() {
   const navigate = useNavigate();
   const [post, setPost] = useState(null);
   const [showModal, setShowModal] = useState(false);
+  const [likes, setLikes] = useState(0);
 
   useEffect(() => {
     const postRef = doc(db, 'posts', id);
@@ -36,11 +37,20 @@ function Post() {
 
   if (!post) {
     return (
-      <div className="flex items-center justify-center h-screen">
-        <p className="text-gray-500 text-xl font-medium">Loading...</p>
+      <div class="flex justify-center items-center h-screen">
+        <div class="relative inline-block">
+          <div class="w-16 h-16 border-4 border-gray-300 rounded-full"></div>
+          <div class="absolute top-0 left-0 w-16 h-16 border-4 border-indigo-500 rounded-full border-t-0 animate-spin"></div>
+        </div>
       </div>
     );
   }
+
+  const handleLikeClick = async () => {
+    const postRef = doc(db, 'posts', id);
+    await updateDoc(postRef, { likes: likes + 1 });
+    setLikes(likes + 1);
+  };
 
   const handleEditClick = () => {
     setShowModal(true);
@@ -80,6 +90,33 @@ function Post() {
           className="prose mt-6"
           dangerouslySetInnerHTML={{ __html: post.content }}
         />
+      </div>
+
+      <div className="flex justify-center">
+        <a href="mailto:mateusomarinho@gmail.com" className='m-2'>
+          <img
+            src="https://img.shields.io/badge/-Gmail-%23333?style=for-the-badge&logo=gmail&logoColor=white"
+            target="_blank"
+            alt=""
+          />
+        </a>
+        <a
+          href="https://www.linkedin.com/in/mateus-marinho-908a26229/"
+          target="_blank"
+          rel="noreferrer"
+          className='m-2'
+        >
+          <img
+            src="https://img.shields.io/badge/-LinkedIn-%230077B5?style=for-the-badge&logo=linkedin&logoColor=white"
+            target="_blank"
+            alt=""
+          />
+        </a>
+        <div>
+          <button className="m-2" onClick={handleLikeClick}>
+            {likes} likes
+          </button>
+        </div>
       </div>
 
       <EditPost

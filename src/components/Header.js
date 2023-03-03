@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
-import { auth } from '../config/firebase';
+import { auth, db } from '../config/firebase';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { Link } from 'react-router-dom';
 
@@ -11,11 +11,6 @@ const Header = ({ onOpen }) => {
   const [showMenu, setShowMenu] = useState(false);
   const searchInputRef = useRef(null);
   const menuRef = useRef(null);
-
-  const handleSearch = () => {
-    console.log(`Searching for "${searchTerm}"...`);
-    //implement
-  };
 
   const handleLogin = async () => {
     const provider = new GoogleAuthProvider();
@@ -51,6 +46,17 @@ const Header = ({ onOpen }) => {
     };
   }, [searchInputRef, menuRef]);
 
+  const handleSearch = async () => {
+    console.log(`Searching for "${searchTerm}"...`);
+    //implement
+    const querySnapshot = await db
+      .collection('posts')
+      .where('title', 'array-contains', searchTerm)
+      .get();
+    const results = querySnapshot.docs.map((doc) => doc.data());
+    console.log(results);
+  };
+
   return (
     <nav className="bg-white py-4 px-8 shadow-sm">
       <div className="max-w-7xl mx-auto flex justify-between items-center">
@@ -63,7 +69,29 @@ const Header = ({ onOpen }) => {
               className="text-blue-500 hover:text-blue-600 focus:outline-none"
               onClick={() => setShowSearch(true)}
             >
-              Search
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="ionicon"
+                viewBox="0 0 512 512"
+                width="26"
+                height="26"
+              >
+                <path
+                  d="M221.09 64a157.09 157.09 0 10157.09 157.09A157.1 157.1 0 00221.09 64z"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-miterlimit="10"
+                  stroke-width="32"
+                ></path>
+                <path
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-miterlimit="10"
+                  stroke-width="32"
+                  d="M338.29 338.29L448 448"
+                ></path>
+              </svg>
             </button>
             {showSearch && (
               <div className="absolute top-0 right-0 z-10 bg-white border border-gray-400 rounded w-96">

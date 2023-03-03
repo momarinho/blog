@@ -41,16 +41,22 @@ const Posts = () => {
   };
 
   return (
-    <main class="max-w-7xl mx-auto py-8 px-8 sm:px-16 md:px-24 min-w-[320px]">
+    <main>
       <AddPostModal
         show={showAddModal}
         onClose={handleCloseModal}
         onAdd={handleAdd}
       />
 
-      <RecentPosts posts={posts} />
+      <div className="mx-auto sm:px-16 md:px-24">
+        <RecentPosts posts={posts} />
+      </div>
 
-      <AllPosts posts={posts} onOpen={handleOpenModal} />
+      <div></div>
+
+      <div className="bg-gray-50">
+        <AllPosts posts={posts} onOpen={handleOpenModal} />
+      </div>
     </main>
   );
 };
