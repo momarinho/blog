@@ -1,8 +1,7 @@
 import { useEffect, useState } from 'react';
-import { db, auth } from '../config/firebase';
-import { collection, onSnapshot, addDoc } from 'firebase/firestore';
+import { db } from '../config/firebase';
+import { collection, onSnapshot } from 'firebase/firestore';
 
-import AddPostModal from './AddPostModal';
 import RecentPosts from './RecentPosts';
 import AllPosts from './AllPosts';
 import RelevantPosts from './RelevantPosts';
@@ -23,33 +22,12 @@ const Posts = () => {
     return () => unsubscribe();
   }, []);
 
-  const handleAdd = async (title, content) => {
-    const docRef = await addDoc(collection(db, 'posts'), {
-      title,
-      content,
-      uid: auth.currentUser.uid,
-      createdAt: new Date(),
-    });
-    console.log('New post added with ID: ', docRef.id);
-    setShowAddModal(false);
-  };
-
-  const handleCloseModal = () => {
-    setShowAddModal(false);
-  };
-
   const handleOpenModal = () => {
     setShowAddModal(true);
   };
 
   return (
     <main>
-      <AddPostModal
-        show={showAddModal}
-        onClose={handleCloseModal}
-        onAdd={handleAdd}
-      />
-
       <div className="mx-auto sm:px-16 md:px-24">
         <RecentPosts posts={posts} />
       </div>

@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
-const AllPosts = ({ posts, onOpen, likes }) => {
+const AllPosts = ({ posts, likes }) => {
   const [numPosts, setNumPosts] = useState(6);
 
   const sortedPosts = posts
@@ -19,12 +19,6 @@ const AllPosts = ({ posts, onOpen, likes }) => {
     <section>
       <div className="flex justify-between m-12">
         <h2 className="text-2xl font-bold mb-4">All Posts</h2>
-        <button
-          onClick={onOpen}
-          className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
-        >
-          New Post
-        </button>
       </div>
       <InfiniteScroll
         dataLength={visiblePosts.length}
@@ -38,7 +32,11 @@ const AllPosts = ({ posts, onOpen, likes }) => {
             </div>
           </div>
         }
-        endMessage={<p className="text-center mt-2 text-gray-300">No more posts to show</p>}
+        endMessage={
+          <p className="text-center mt-2 text-gray-300">
+            No more posts to show
+          </p>
+        }
       >
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
           {visiblePosts.map((post) => (
