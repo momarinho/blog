@@ -5,6 +5,7 @@ import { collection, onSnapshot, addDoc } from 'firebase/firestore';
 import AddPostModal from './AddPostModal';
 import RecentPosts from './RecentPosts';
 import AllPosts from './AllPosts';
+import RelevantPosts from './RelevantPosts';
 
 const Posts = () => {
   const [posts, setPosts] = useState([]);
@@ -53,7 +54,13 @@ const Posts = () => {
         <RecentPosts posts={posts} />
       </div>
 
-      <div className="bg-gray-50 py-16">
+      <div className="bg-gray-100 py-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <RelevantPosts posts={posts} />
+        </div>
+      </div>
+
+      <div className="py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <AllPosts posts={posts} onOpen={handleOpenModal} />
         </div>

@@ -34,7 +34,7 @@ const RecentPosts = ({ posts }) => {
             <Link to={`/posts/${post.id}`} className="text-xl font-bold mb-2">
               {post.title}
             </Link>
-            <img src={post.thumbnailUrl} alt={post.title} className="mb-4" />
+
             <p className="text-sm text-gray-500">{post.excerpt}</p>
             <div className="flex justify-between items-center">
               <p className="text-sm text-gray-500">
