@@ -71,20 +71,30 @@ function Post() {
     const currentUser = auth.currentUser;
     const postRef = doc(db, 'posts', id);
 
+    // Check if the user is logged in
+    if (!currentUser) {
+      return;
+    }
+
     // Check if the user has already liked the post
     const postSnapshot = await getDoc(postRef);
     const postData = postSnapshot.data();
     const likedBy = postData.likedBy || [];
     if (likedBy.includes(currentUser.uid)) {
-      // User has already liked the post
-      return;
+      // User has already liked the post, so unlike it
+      const newLikes =
+        typeof postData.likes === 'number' ? postData.likes - 1 : 0;
+      const newLikedBy = likedBy.filter((uid) => uid !== currentUser.uid);
+      await updateDoc(postRef, { likes: newLikes, likedBy: newLikedBy });
+      setLikes(newLikes);
+    } else {
+      // User hasn't liked the post yet, so like it
+      const newLikes =
+        typeof postData.likes === 'number' ? postData.likes + 1 : 1;
+      const newLikedBy = [...likedBy, currentUser.uid];
+      await updateDoc(postRef, { likes: newLikes, likedBy: newLikedBy });
+      setLikes(newLikes);
     }
-
-    // Update the like count and the list of users who liked the post
-    const newLikes = postData.likes + 1;
-    const newLikedBy = [...likedBy, currentUser.uid];
-    setLikes(Number(newLikes));
-    await updateDoc(postRef, { likes: newLikes, likedBy: newLikedBy });
   };
 
   const handleEditClick = () => {
@@ -107,7 +117,7 @@ function Post() {
             {isCreator && (
               <button
                 type="button"
-                className="inline-block bg-gray-700 py-2 px-4 border border-transparent rounded-md shadow-sm text-base font-medium text-white hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 mr-4"
+                className="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-white bg-gray-600 hover:bg-gray-700 mr-2"
                 onClick={handleEditClick}
               >
                 Edit
@@ -150,11 +160,13 @@ function Post() {
             alt=""
           />
         </a>
-        <div>
-          <button className="m-2" onClick={handleLikeClick}>
-            {likes} likes
-          </button>
-        </div>
+
+        <button
+          className="m-2 px-6 bg-blue-500 hover:bg-blue-600 text-white"
+          onClick={handleLikeClick}
+        >
+          Likes {likes}
+        </button>
       </div>
 
       <EditPost
