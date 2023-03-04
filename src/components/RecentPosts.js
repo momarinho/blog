@@ -30,6 +30,7 @@ const RecentPosts = ({ posts }) => {
             className={`bg-white rounded-lg shadow-md px-48 py-36 mb-4 hover:scale-105 hover:opacity-90 ${
               index === currentIndex ? '' : 'hidden'
             }`}
+            style={{ backgroundImage: `url(${post.imageUrl})` }}
           >
             <Link to={`/posts/${post.id}`} className="text-xl font-bold mb-2">
               {post.title}

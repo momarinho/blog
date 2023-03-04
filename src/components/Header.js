@@ -30,18 +30,7 @@ const Header = () => {
     window.location.reload();
     setShowMenu(false);
   };
-
-  const handleAddPost = async (title, content) => {
-    const docRef = await addDoc(collection(db, 'posts'), {
-      title,
-      content,
-      uid: auth.currentUser.uid,
-      createdAt: new Date(),
-    });
-    console.log('New post added with ID: ', docRef.id);
-    setShowAddModal(false);
-  };
-
+  
   const handleCloseModal = () => {
     setShowAddModal(false);
   };
@@ -71,7 +60,7 @@ const Header = () => {
         <AddPostModal
           show={showAddModal}
           onClose={handleCloseModal}
-          onAdd={handleAddPost}
+          setShowAddModal={setShowAddModal}
         />
       )}
       <div className="max-w-7xl mx-auto flex justify-between items-center">
