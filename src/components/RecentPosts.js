@@ -12,7 +12,7 @@ const RecentPosts = ({ posts }) => {
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentIndex((currentIndex + 1) % sortedPosts.length);
-    }, 4000);
+    }, 4500);
 
     return () => clearInterval(interval);
   }, [currentIndex, sortedPosts.length]);
@@ -22,12 +22,12 @@ const RecentPosts = ({ posts }) => {
   };
 
   return (
-    <section className="mb-8">
-      <div className="flex flex-col md:flex-row md:gap-4">
+    <div className="mb-8 flex justify-center items-center">
+      <div className="flex flex-col md:flex-row md:gap-4 mx-auto">
         {sortedPosts.map((post, index) => (
           <div
             key={post.id}
-            className={`bg-white rounded-lg shadow-md p-24 flex-1 mb-4 hover:scale-105 ${
+            className={`bg-white rounded-lg shadow-md px-48 py-36 mb-4 hover:scale-105 hover:opacity-90 ${
               index === currentIndex ? '' : 'hidden'
             }`}
           >
@@ -36,15 +36,15 @@ const RecentPosts = ({ posts }) => {
             </Link>
 
             <p className="text-sm text-gray-500">{post.excerpt}</p>
-            <div className="flex justify-between items-center">
+            <div className="flex flex-col justify-between h-full">
               <p className="text-sm text-gray-500">
                 {new Date(post.createdAt.toDate()).toLocaleString()}
               </p>
-              <div className="flex">
+              <div className="flex-grow flex justify-content-between">
                 {sortedPosts.map((post, index) => (
                   <button
                     key={index}
-                    className={`h-2 w-2 rounded-full mx-1 ${
+                    className={`h-3 w-3 rounded-full mx-1 ${
                       index === currentIndex ? 'bg-blue-500' : 'bg-gray-300'
                     }`}
                     onClick={() => goToIndex(index)}
@@ -55,7 +55,7 @@ const RecentPosts = ({ posts }) => {
           </div>
         ))}
       </div>
-    </section>
+    </div>
   );
 };
 

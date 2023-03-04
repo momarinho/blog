@@ -16,9 +16,9 @@ const AllPosts = ({ posts, likes }) => {
   };
 
   return (
-    <section>
-      <div className="flex justify-between m-12">
-        <h2 className="text-2xl font-bold mb-4">All Posts</h2>
+    <div>
+      <div className="flex justify-between">
+        <h2 className="text-2xl font-bold mb-4 text-gray-500">All Posts</h2>
       </div>
       <InfiniteScroll
         dataLength={visiblePosts.length}
@@ -63,7 +63,7 @@ const AllPosts = ({ posts, likes }) => {
           ))}
         </div>
       </InfiniteScroll>
-    </section>
+    </div>
   );
 };
 

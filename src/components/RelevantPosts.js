@@ -15,11 +15,10 @@ const RelevantPosts = ({ posts }) => {
   }, [posts]);
 
   return (
-    <section>
-      <div className="flex m-12">
-        <h2 className="text-2xl font-bold mb-4">Popular Posts</h2>
+    <div>
+      <div className="flex">
+        <h2 className="text-2xl font-bold mb-4 text-gray-500">Popular Posts</h2>
       </div>
-
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
         {sortedPosts.map((post) => (
           <Link
@@ -43,7 +42,7 @@ const RelevantPosts = ({ posts }) => {
           </Link>
         ))}
       </div>
-    </section>
+    </div>
   );
 };
 

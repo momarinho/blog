@@ -1,9 +1,9 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import EditPost from './components/EditPost';
 
 import './index.css';
 import HomePage from './screens/HomePage';
 import Post from './screens/Post';
+import SearchPage from './screens/SearchPage';
 
 function App() {
   return (
@@ -11,8 +11,10 @@ function App() {
       <Router>
         <Routes>
           <Route exact path="/" element={<HomePage />} />
+
           <Route exact path="/posts/:id" element={<Post />} />
-          <Route exact path="/posts/:id/edit" element={<EditPost />} />
+
+          <Route exact path="/search" element={<SearchPage />} />
         </Routes>
       </Router>
     </div>

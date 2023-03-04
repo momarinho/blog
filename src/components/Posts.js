@@ -26,23 +26,39 @@ const Posts = () => {
     setShowAddModal(true);
   };
 
+  const sections = document.querySelectorAll('.section-container');
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('active');
+      } else {
+        entry.target.classList.remove('active');
+      }
+    });
+  });
+
+  sections.forEach((section) => {
+    observer.observe(section);
+  });
+
   return (
     <main>
-      <div className="mx-auto sm:px-16 md:px-24">
+      <section className="section-container">
         <RecentPosts posts={posts} />
-      </div>
+      </section>
 
-      <div className="bg-gray-100 py-16">
+      <section className="section-container bg-gray-100 py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <RelevantPosts posts={posts} />
         </div>
-      </div>
+      </section>
 
-      <div className="py-16">
+      <section className="section-container py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <AllPosts posts={posts} onOpen={handleOpenModal} />
         </div>
-      </div>
+      </section>
     </main>
   );
 };

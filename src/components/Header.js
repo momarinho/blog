@@ -7,7 +7,7 @@ import { addDoc, collection } from 'firebase/firestore';
 
 import AddPostModal from './AddPostModal';
 
-const Header = ({ onOpen }) => {
+const Header = () => {
   const [user] = useAuthState(auth);
   const [showAddModal, setShowAddModal] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
@@ -18,6 +18,7 @@ const Header = ({ onOpen }) => {
     await signInWithPopup(auth, provider)
       .then(() => {
         console.log('Signed in with Google successfully');
+        window.location.reload();
       })
       .catch((error) => {
         console.error('Error signing in with Google', error);
@@ -26,10 +27,11 @@ const Header = ({ onOpen }) => {
 
   const handleLogout = async () => {
     await auth.signOut();
+    window.location.reload();
     setShowMenu(false);
   };
 
-  const handleAdd = async (title, content) => {
+  const handleAddPost = async (title, content) => {
     const docRef = await addDoc(collection(db, 'posts'), {
       title,
       content,
@@ -55,14 +57,13 @@ const Header = ({ onOpen }) => {
         setShowMenu(false);
       }
     };
-  
+
     document.addEventListener('mousedown', handleDocumentClick);
-  
+
     return () => {
       document.removeEventListener('mousedown', handleDocumentClick);
     };
   }, [menuRef]);
-  
 
   return (
     <nav className="bg-gray-700 py-4 px-8 shadow-sm mb-8">
@@ -70,14 +71,18 @@ const Header = ({ onOpen }) => {
         <AddPostModal
           show={showAddModal}
           onClose={handleCloseModal}
-          onAdd={handleAdd}
+          onAdd={handleAddPost}
         />
       )}
       <div className="max-w-7xl mx-auto flex justify-between items-center">
         <Link to="/" className="font-bold text-xl text-gray-100">
           My Blog
         </Link>
-        <button className="text-blue-500 hover:text-blue-600 focus:outline-none">
+
+        <Link
+          to="/search"
+          className="text-blue-500 hover:text-blue-600 focus:outline-none"
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             class="ionicon"
@@ -101,7 +106,7 @@ const Header = ({ onOpen }) => {
               d="M338.29 338.29L448 448"
             ></path>
           </svg>
-        </button>
+        </Link>
         {showAddModal ? (
           <button className="text-gray-100" onClick={handleCloseModal}>
             Close
@@ -121,15 +126,15 @@ const Header = ({ onOpen }) => {
               >
                 <button
                   className="block px-4 py-2 text-gray-800 hover:bg-indigo-500 hover:text-white w-full text-left"
-                  onClick={handleLogout}
-                >
-                  Logout
-                </button>
-                <button
-                  className="block px-4 py-2 text-gray-800 hover:bg-indigo-500 hover:text-white w-full text-left"
                   onClick={handleOpenModal}
                 >
                   New Post
+                </button>
+                <button
+                  className="block px-4 py-2 text-gray-800 hover:bg-indigo-500 hover:text-white w-full text-left"
+                  onClick={handleLogout}
+                >
+                  Logout
                 </button>
               </div>
             )}
