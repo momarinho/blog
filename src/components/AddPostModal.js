@@ -91,16 +91,19 @@ const AddPostModal = ({ show, onClose, setShowAddModal }) => {
           aria-modal="true"
           aria-labelledby="add-post-modal-title"
         >
-          <div className="bg-gray-50 flex justify-between mb-4 p-4">
-            <h2 className="text-2xl font-bold">New Post</h2>
+          <div className="bg-gray-50 flex justify-between p-4 mb-4">
+            <h2 id="add-post-modal-title" className="text-2xl font-bold">
+              New Post
+            </h2>
             <button
+              onClick={handleAddPost}
               type="submit"
-              className="bg-indigo-500 hover:bg-indigo-700 rounded-lg text-white px-4"
+              className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-2 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:ml-3 sm:w-auto sm:text-sm"
             >
               Add Post
             </button>
           </div>
-          <form onSubmit={handleAddPost}>
+          <form>
             <label className="block mb-2" htmlFor="title">
               Title
             </label>
@@ -124,15 +127,13 @@ const AddPostModal = ({ show, onClose, setShowAddModal }) => {
               formats={formats}
               className="mb-4"
             />
-            <div className="flex flex-col mt-4">
-              <label htmlFor="file" className="text-gray-700 font-semibold mb-2">
-                Cover Image
-              </label>
+            <div className="form-group">
+              <label htmlFor="file">Cover Image</label>
               <input
                 type="file"
-                id="file"
-                className="text-fuchsia-600 hover:text-fuchsia-800 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-transparent"
+                className=""
                 onChange={handleUpload}
+                accept="image/png, image/jpeg"
               />
             </div>
 
@@ -159,6 +160,9 @@ const AddPostModal = ({ show, onClose, setShowAddModal }) => {
               </button>
             </div>
           </form>
+          <footer className='fixed bottom-0 text-gray-500'>
+            <p>The card sizes are h:320px/w:520px</p>
+          </footer>
         </div>
       </div>
     )

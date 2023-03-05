@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import InfiniteScroll from 'react-infinite-scroll-component';
+import Loader from './Loader';
 
 const AllPosts = ({ posts, likes }) => {
   const [numPosts, setNumPosts] = useState(6);
@@ -24,14 +25,7 @@ const AllPosts = ({ posts, likes }) => {
         dataLength={visiblePosts.length}
         next={handleShowMore}
         hasMore={numPosts < sortedPosts.length}
-        loader={
-          <div class="flex justify-center items-center h-screen">
-            <div class="relative inline-block">
-              <div class="w-16 h-16 border-4 border-gray-300 rounded-full"></div>
-              <div class="absolute top-0 left-0 w-16 h-16 border-4 border-indigo-500 rounded-full border-t-0 animate-spin"></div>
-            </div>
-          </div>
-        }
+        loader={<Loader />}
         endMessage={
           <p className="text-center mt-2 text-gray-300">
             No more posts to show

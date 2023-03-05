@@ -11,6 +11,7 @@ import {
 
 import Header from '../components/Header';
 import EditPost from '../components/EditPost';
+import Loader from '../components/Loader';
 
 function Post() {
   const { id } = useParams();
@@ -51,14 +52,7 @@ function Post() {
   };
 
   if (!post) {
-    return (
-      <div class="flex justify-center items-center h-screen">
-        <div class="relative inline-block">
-          <div class="w-16 h-16 border-4 border-gray-300 rounded-full"></div>
-          <div class="absolute top-0 left-0 w-16 h-16 border-4 border-indigo-500 rounded-full border-t-0 animate-spin"></div>
-        </div>
-      </div>
-    );
+    return <Loader />;
   }
 
   const handleDeleteClick = async () => {

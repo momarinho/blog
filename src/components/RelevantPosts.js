@@ -5,12 +5,15 @@ const RelevantPosts = ({ posts }) => {
   const [sortedPosts, setSortedPosts] = useState([]);
 
   useEffect(() => {
-    const newSortedPosts = [...posts]
+    const newSortedPosts = posts
       .slice()
       .sort((a, b) => {
+        console.log(a.likes, b.likes);
         return b.likes - a.likes;
       })
       .slice(0, 6);
+
+    console.log(newSortedPosts);
     setSortedPosts(newSortedPosts);
   }, [posts]);
 

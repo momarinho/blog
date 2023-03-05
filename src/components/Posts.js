@@ -44,17 +44,17 @@ const Posts = () => {
 
   return (
     <main>
-      <section className="section-container">
+      <section className="flex items-center justify-center bg-gray-50 min-h-screen">
         <RecentPosts posts={posts} />
       </section>
 
-      <section className="section-container bg-gray-100 py-16">
+      <section className="section-container bg-gray-100 py-16 min-h-screen">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <RelevantPosts posts={posts} />
         </div>
       </section>
 
-      <section className="section-container py-16">
+      <section className="section-container py-16 min-h-screen">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <AllPosts posts={posts} onOpen={handleOpenModal} />
         </div>
