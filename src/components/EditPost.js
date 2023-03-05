@@ -1,7 +1,11 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import ReactQuill from 'react-quill';
+import { Quill } from 'react-quill';
+import { ImageResize } from 'quill-image-resize-module';
 import 'react-quill/dist/quill.snow.css';
+
+Quill.register('modules/imageResize', ImageResize);
 
 const EditPost = ({ post, onUpdatePost, setShowModal, show, onDelete }) => {
   const [title, setTitle] = useState(post.title);
@@ -39,9 +43,11 @@ const EditPost = ({ post, onUpdatePost, setShowModal, show, onDelete }) => {
         ['link', 'image'],
         ['clean'],
       ],
-      imageResize: true,
     },
-    // imageResize: {},
+    imageResize: {
+      parchment: Quill.import('parchment'),
+      modules: ['Resize', 'DisplaySize'],
+    },
   };
 
   const formats = [

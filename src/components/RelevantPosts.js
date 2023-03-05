@@ -27,7 +27,7 @@ const RelevantPosts = ({ posts }) => {
           <Link
             key={post.id}
             to={`/posts/${post.id}`}
-            className="bg-white rounded-lg shadow-lg p-8 flex flex-col hover:bg-gray-200"
+            className="bg-white rounded-lg shadow-lg p-8 flex flex-col hover:bg-gray-200 relative"
           >
             <h2 className="text-2xl font-bold mb-2">{post.title}</h2>
             <p
@@ -36,6 +36,12 @@ const RelevantPosts = ({ posts }) => {
                 __html: `${post.content.substring(0, 50)}...`,
               }}
             ></p>
+            <img
+              src={post.imageUrl}
+              alt={post.title}
+              className="absolute top-0 left-0 w-full h-full object-cover opacity-0 hover:opacity-100"
+              style={{ backgroundColor: 'gray' }}
+            />
 
             <div className="flex justify-between items-center">
               <p className="text-sm text-gray-500">

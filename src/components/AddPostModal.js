@@ -1,9 +1,13 @@
 import React, { useState } from 'react';
 import ReactQuill from 'react-quill';
+import { Quill } from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
+import { ImageResize } from 'quill-image-resize-module';
 import { addDoc, collection } from 'firebase/firestore';
 import { auth, db } from '../config/firebase';
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+
+Quill.register('modules/imageResize', ImageResize);
 
 const AddPostModal = ({ show, onClose, setShowAddModal }) => {
   const [title, setTitle] = useState('');
@@ -60,9 +64,10 @@ const AddPostModal = ({ show, onClose, setShowAddModal }) => {
         ['link', 'image'],
         ['clean'],
       ],
-      imageResize: {
-        displaySize: true,
-      },
+    },
+    imageResize: {
+      parchment: Quill.import('parchment'),
+      modules: ['Resize', 'DisplaySize'],
     },
   };
 
@@ -97,7 +102,8 @@ const AddPostModal = ({ show, onClose, setShowAddModal }) => {
             </h2>
             <button
               onClick={handleAddPost}
-              type="submit"
+              type="button"
+              disabled={!title || !content}
               className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-2 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:ml-3 sm:w-auto sm:text-sm"
             >
               Add Post
@@ -125,15 +131,16 @@ const AddPostModal = ({ show, onClose, setShowAddModal }) => {
               required
               modules={modules}
               formats={formats}
-              className="mb-4"
+              className="font-sans text-base mb-4"
             />
-            <div className="form-group">
+            <div className="">
               <label htmlFor="file">Cover Image</label>
               <input
                 type="file"
                 className=""
                 onChange={handleUpload}
                 accept="image/png, image/jpeg"
+                required
               />
             </div>
 
@@ -160,7 +167,7 @@ const AddPostModal = ({ show, onClose, setShowAddModal }) => {
               </button>
             </div>
           </form>
-          <footer className='fixed bottom-0 text-gray-500'>
+          <footer className="text-gray-500">
             <p>The card sizes are h:320px/w:520px</p>
           </footer>
         </div>

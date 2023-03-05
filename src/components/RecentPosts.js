@@ -36,7 +36,7 @@ const RecentPosts = ({ posts }) => {
               style={{ textDecoration: 'none' }}
             >
               <div
-                className={`bg-white rounded-lg shadow-md mb-4 hover:scale-105 hover:opacity-80 ${
+                className={`bg-white shadow-md mb-4 hover:scale-105 hover:opacity-80 ${
                   index === currentIndex ? '' : 'hidden'
                 }`}
                 style={{

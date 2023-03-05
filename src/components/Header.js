@@ -18,7 +18,8 @@ const Header = () => {
 
   const navigate = useNavigate();
 
-  const handleLogin = async () => {
+  const handleLogin = async (event) => {
+    event.preventDefault();
     const provider = new GoogleAuthProvider();
     await signInWithPopup(auth, provider)
       .then(() => {
