@@ -26,6 +26,7 @@ const EditPost = ({ post, onUpdatePost, setShowModal, show, onDelete }) => {
       title,
       content,
     });
+    window.location.reload();
   };
 
   const handleDeletePost = (event) => {

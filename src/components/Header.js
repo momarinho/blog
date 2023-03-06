@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 import { auth } from '../config/firebase';
 import { useAuthState } from 'react-firebase-hooks/auth';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 import AddPostModal from './AddPostModal';
 
@@ -10,13 +10,8 @@ const Header = () => {
   const [user] = useAuthState(auth);
   const [showAddModal, setShowAddModal] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
-  const [isSearchVisible, setIsSearchVisible] = useState(false);
-  const [searchQuery, setSearchQuery] = useState('');
 
   const menuRef = useRef(null);
-  const searchRef = useRef(null);
-
-  const navigate = useNavigate();
 
   const handleLogin = async (event) => {
     event.preventDefault();
@@ -46,26 +41,10 @@ const Header = () => {
     setShowMenu(false);
   };
 
-  const handleSearchClick = () => {
-    setIsSearchVisible(true);
-  };
-
-  const handleSearchChange = (event) => {
-    setSearchQuery(event.target.value);
-  };
-
-  const handleSearchSubmit = (event) => {
-    event.preventDefault();
-    navigate(`/search?q=${encodeURIComponent(searchQuery)}`);
-  };
-
   useEffect(() => {
     const handleDocumentClick = (event) => {
       if (menuRef.current && !menuRef.current.contains(event.target)) {
         setShowMenu(false);
-      }
-      if (searchRef.current && !searchRef.current.contains(event.target)) {
-        setIsSearchVisible(false);
       }
     };
 
@@ -74,7 +53,7 @@ const Header = () => {
     return () => {
       document.removeEventListener('mousedown', handleDocumentClick);
     };
-  }, [menuRef, searchRef]);
+  }, [menuRef]);
 
   return (
     <nav className="bg-gray-700 py-4 px-8 shadow-sm">
@@ -92,50 +71,33 @@ const Header = () => {
         >
           My Blog
         </Link>
-        <div
-          className="text-blue-500 hover:text-blue-600 focus:outline-none cursor-pointer"
-          ref={searchRef}
-        >
-          {isSearchVisible ? (
-            <form onSubmit={handleSearchSubmit}>
-              <input
-                type="text"
-                id="search-input"
-                className="w-72 text-black rounded-md"
-                value={searchQuery}
-                onChange={handleSearchChange}
-              />
-              <button type="submit" className="ml-2">
-                Search
-              </button>
-            </form>
-          ) : (
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="ionicon"
-              viewBox="0 0 512 512"
-              width="26"
-              height="26"
-              onClick={handleSearchClick}
-            >
-              <path
-                d="M221.09 64a157.09 157.09 0 10157.09 157.09A157.1 157.1 0 00221.09 64z"
-                fill="none"
-                stroke="currentColor"
-                strokeMiterlimit="10"
-                strokeWidth="32"
-              ></path>
-              <path
-                fill="none"
-                stroke="currentColor"
-                strokeLinecap="round"
-                strokeMiterlimit="10"
-                strokeWidth="32"
-                d="M338.29 338.29L448 448"
-              ></path>
-            </svg>
-          )}
-        </div>
+        <Link 
+        to='/search'
+        className="text-blue-500 hover:text-blue-600 focus:outline-none cursor-pointer">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="ionicon"
+            viewBox="0 0 512 512"
+            width="26"
+            height="26"
+          >
+            <path
+              d="M221.09 64a157.09 157.09 0 10157.09 157.09A157.1 157.1 0 00221.09 64z"
+              fill="none"
+              stroke="currentColor"
+              strokeMiterlimit="10"
+              strokeWidth="32"
+            ></path>
+            <path
+              fill="none"
+              stroke="currentColor"
+              strokeLinecap="round"
+              strokeMiterlimit="10"
+              strokeWidth="32"
+              d="M338.29 338.29L448 448"
+            ></path>
+          </svg>
+        </Link>
 
         {showAddModal ? (
           <button className="text-gray-100" onClick={handleCloseModal}>

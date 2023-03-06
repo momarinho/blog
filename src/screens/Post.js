@@ -20,6 +20,7 @@ function Post() {
   const [showModal, setShowModal] = useState(false);
   const [likes, setLikes] = useState(0);
   const [isCreator, setIsCreator] = useState(false);
+  const [isSaved, setIsSaved] = useState(false);
 
   useEffect(() => {
     const postRef = doc(db, 'posts', id);
@@ -91,6 +92,30 @@ function Post() {
     }
   };
 
+  const handleSaveClick = async () => {
+    const currentUser = auth.currentUser;
+    const postRef = doc(db, 'posts', id);
+
+    if (!currentUser) {
+      return;
+    }
+
+    const postSnapshot = await getDoc(postRef);
+    const postData = postSnapshot.data();
+    const savedBy = postData.savedBy || [];
+
+    if (savedBy.includes(currentUser.uid)) {
+      // User has already saved the post, so unsave it
+      const newSavedBy = savedBy.filter((uid) => uid !== currentUser.uid);
+      await updateDoc(postRef, { savedBy: newSavedBy });
+      setIsSaved(false);
+    } else {
+      const newSavedBy = [...savedBy, currentUser.uid];
+      await updateDoc(postRef, { savedBy: newSavedBy });
+      setIsSaved(true);
+    }
+  };
+
   const handleEditClick = () => {
     setShowModal(true);
   };
@@ -120,7 +145,14 @@ function Post() {
             {console.log('is creator', isCreator)}
             <button
               type="button"
-              className="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"
+              className="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 mr-2"
+              onClick={handleSaveClick}
+            >
+              {isSaved ? 'Unsave' : 'Save'}
+            </button>
+            <button
+              type="button"
+              className="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-white bg-red-500 hover:bg-red-600"
               onClick={handleBack}
             >
               Back
