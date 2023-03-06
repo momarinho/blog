@@ -23,10 +23,10 @@ const EditPost = ({ post, onUpdatePost, setShowModal, show, onDelete }) => {
     event.preventDefault();
 
     onUpdatePost({
+      ...post,
       title,
       content,
     });
-    window.location.reload();
   };
 
   const handleDeletePost = (event) => {
@@ -110,7 +110,7 @@ const EditPost = ({ post, onUpdatePost, setShowModal, show, onDelete }) => {
               type="text"
               value={title}
               onChange={handleTitleChange}
-              className="w-full border border-gray-400 border-transparent"
+              className="w-full border border-gray-400 p-2 rounded mb-4"
             />
             <label
               htmlFor="content"
@@ -128,6 +128,7 @@ const EditPost = ({ post, onUpdatePost, setShowModal, show, onDelete }) => {
               className="mb-4"
             />
           </div>
+
           <div className="flex justify-between">
             <button
               className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"

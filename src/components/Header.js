@@ -10,6 +10,7 @@ const Header = () => {
   const [user] = useAuthState(auth);
   const [showAddModal, setShowAddModal] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
+  const [showLogoutModal, setShowLogoutModal] = useState(false);
 
   const menuRef = useRef(null);
 
@@ -28,8 +29,8 @@ const Header = () => {
 
   const handleLogout = async () => {
     await auth.signOut();
-    window.location.reload();
     setShowMenu(false);
+    setShowLogoutModal(false);
   };
 
   const handleCloseModal = () => {
@@ -64,6 +65,32 @@ const Header = () => {
           setShowAddModal={setShowAddModal}
         />
       )}
+      {showLogoutModal && (
+        <div className="fixed z-50 inset-0 overflow-y-auto bg-gray-900 bg-opacity-90">
+          <div className="flex items-center justify-center min-h-screen">
+            <div className="bg-white p-6 rounded-lg shadow-lg">
+              <h2 className="text-xl font-semibold mb-4">
+                Logout Confirmation
+              </h2>
+              <p className="mb-4">Are you sure you want to logout?</p>
+              <div className="flex justify-end">
+                <button
+                  className="bg-gray-500 text-white py-2 px-4 rounded mr-2"
+                  onClick={() => setShowLogoutModal(false)}
+                >
+                  Cancel
+                </button>
+                <button
+                  className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded"
+                  onClick={handleLogout}
+                >
+                  Logout
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
       <div className="max-w-7xl mx-auto flex justify-between items-center">
         <Link
           to="/"
@@ -71,9 +98,10 @@ const Header = () => {
         >
           My Blog
         </Link>
-        <Link 
-        to='/search'
-        className="text-blue-500 hover:text-blue-600 focus:outline-none cursor-pointer">
+        <Link
+          to="/search"
+          className="text-blue-500 hover:text-blue-600 focus:outline-none cursor-pointer"
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             className="ionicon"
@@ -124,7 +152,7 @@ const Header = () => {
                 </button>
                 <button
                   className="block px-4 py-2 text-gray-800 hover:bg-indigo-500 hover:text-white w-full text-left"
-                  onClick={handleLogout}
+                  onClick={() => setShowLogoutModal(true)}
                 >
                   Logout
                 </button>

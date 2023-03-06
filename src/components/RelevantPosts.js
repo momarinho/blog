@@ -22,12 +22,12 @@ const RelevantPosts = ({ posts }) => {
       <div className="flex">
         <h2 className="text-2xl font-bold mb-4 text-gray-500">Popular Posts</h2>
       </div>
-      <div className="flex flex-row">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
         {sortedPosts.map((post) => (
           <Link
             key={post.id}
             to={`/posts/${post.id}`}
-            className="bg-white rounded-lg shadow-lg p-8 flex flex-col hover:bg-gray-200 relative m-2"
+            className="bg-white rounded-lg shadow-lg p-16 flex flex-col hover:bg-gray-200 relative m-2"
           >
             <h2 className="text-2xl font-bold mb-2">{post.title}</h2>
             <p
