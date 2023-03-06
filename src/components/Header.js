@@ -150,6 +150,7 @@ const Header = () => {
                 >
                   New Post
                 </button>
+
                 <button
                   className="block px-4 py-2 text-gray-800 hover:bg-indigo-500 hover:text-white w-full text-left"
                   onClick={() => setShowLogoutModal(true)}

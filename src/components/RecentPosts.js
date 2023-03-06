@@ -49,9 +49,8 @@ const RecentPosts = ({ posts }) => {
               >
                 <div className="flex flex-col justify-end px-6 pb-6 h-full">
                   <div
-                    className="text-xl font-bold mb-4"
+                    className="text-xl font-bold mb-4 text-white"
                     style={{
-                      color: 'white',
                       textShadow: '0px 0px 4px rgba(0,0,0, 1)',
                     }}
                   >
