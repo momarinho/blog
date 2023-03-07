@@ -2,11 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { collection, onSnapshot } from 'firebase/firestore';
 import { db } from '../config/firebase';
 import { Link, useNavigate } from 'react-router-dom';
-import Header from './Header';
+import Loader from './Loader';
 
 const Search = () => {
   const [inputValue, setInputValue] = useState('');
   const [posts, setPosts] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   const navigate = useNavigate();
 
@@ -18,6 +19,7 @@ const Search = () => {
         data.push({ ...doc.data(), id: doc.id });
       });
       setPosts(data);
+      setIsLoading(false);
     });
     return () => unsubscribe();
   }, []);
@@ -53,9 +55,10 @@ const Search = () => {
     navigate(-1);
   };
 
-  return (
+  return isLoading ? (
+    <Loader />
+  ) : (
     <>
-      <Header />
       <div className="mx-12">
         <div className="mx-4 my-8 flex items-center">
           <input
@@ -117,12 +120,12 @@ const Search = () => {
           <h2 className="text-2xl font-bold mb-4 text-gray-500">All Posts</h2>
         </div>
 
-        <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 mx-4 my-8">
+        <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mx-4 my-8">
           {posts.map((post) => (
             <Link
               key={post.id}
               to={`/posts/${post.id}`}
-              className="bg-white rounded-lg shadow-lg p-24 hover:shadow-xl relative"
+              className="bg-white rounded-lg shadow-2xl p-24 hover:shadow-xl relative"
             >
               <h2 className="text-xl font-bold mb-2">{post.title}</h2>
               <p

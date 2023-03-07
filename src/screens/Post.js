@@ -14,6 +14,7 @@ import EditPost from '../components/EditPost';
 import Loader from '../components/Loader';
 import Comment from '../components/Comment';
 import Comments from '../components/Comments';
+import Footer from '../components/Footer';
 
 function Post() {
   const { id } = useParams();
@@ -202,6 +203,8 @@ function Post() {
           onDelete={handleDeleteClick}
         />
       </div>
+
+      <Footer />
     </main>
   );
 }
